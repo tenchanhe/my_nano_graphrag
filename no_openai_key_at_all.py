@@ -39,7 +39,8 @@ async def ollama_model_if_cache(
     kwargs.pop("max_tokens", None)
     kwargs.pop("response_format", None)
 
-    ollama_client = ollama.AsyncClient()
+    ollama_client = ollama.AsyncClient(host='http://140.119.164.70:11435',
+)
     messages = []
     if system_prompt:
         messages.append({"role": "system", "content": system_prompt})
