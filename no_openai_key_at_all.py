@@ -13,11 +13,20 @@ logging.basicConfig(level=logging.WARNING)
 logging.getLogger("nano-graphrag").setLevel(logging.INFO)
 
 # !!! qwen2-7B maybe produce unparsable results and cause the extraction of graph to fail.
-WORKING_DIR = "./nano_graphrag_cache_ollama_TEST"
-MODEL = "llama3.3"
+
+# MODEL = "llama3.3"
+# # WORKING_DIR = "./nano_llama3.3_cache_ollama"
+# WORKING_DIR = "./nano2_llama3.3_cache_ollama"
+
+# MODEL = "llama3.2"
+# WORKING_DIR = "./nano_llama3.2_cache_ollama"
+
+MODEL = "qwen2.5:32b"
+WORKING_DIR = "./nano_xiyouji_cache_ollama"
+
 
 EMBED_MODEL = SentenceTransformer(
-    "sentence-transformers/all-MiniLM-L6-v2", cache_folder=WORKING_DIR, device="cpu"
+    "sentence-transformers/all-MiniLM-L6-v2", cache_folder=WORKING_DIR, device=None
 )
 
 
@@ -44,6 +53,8 @@ async def ollama_model_if_cache(
     messages = []
     if system_prompt:
         messages.append({"role": "system", "content": system_prompt})
+    else:
+        messages.append({"role": "system","content": "You are an intelligent assistant and will follow the instructions given to you to fulfill the goal. The answer should be in the format as in the given example."})
 
     # Get the cached response if having-------------------
     hashing_kv: BaseKVStorage = kwargs.pop("hashing_kv", None)
@@ -55,11 +66,15 @@ async def ollama_model_if_cache(
         if if_cache_return is not None:
             return if_cache_return["return"]
     # -----------------------------------------------------
-    # response = await ollama_client.chat(model=MODEL, messages=messages, **kwargs)
-    option = {"options": {"num_ctx": 100}}
-    response = await ollama_client.chat(model=MODEL, messages=messages, options=option)
+    
+    kwargs = {"options": {"num_ctx": 32000}}
+    response = await ollama_client.chat(model=MODEL, messages=messages, **kwargs)
+    
+    # option = {"options": {"num_ctx": 32000}}
+    # response = await ollama_client.chat(model=MODEL, messages=messages, options=option)
 
     result = response["message"]["content"]
+    # breakpoint()
     # Cache the response if having-------------------
     if hashing_kv is not None:
         await hashing_kv.upsert({args_hash: {"return": result, "model": MODEL}})
@@ -80,16 +95,18 @@ def query():
         embedding_func=local_embedding,
     )
     print(
-        rag.query(
-            "What are the top themes in this story?", param=QueryParam(mode="global")
-        )
+        # rag.query("這是一個怎樣的故事？", param=QueryParam(mode="global"))
+        rag.query("請大致說明這個故事背景。", param=QueryParam(mode="global"))
+        # rag.query("孫悟空的師傅是誰？", param=QueryParam(mode="local"))
     )
 
 
 def insert():
     from time import time
 
-    with open("./tests/mock_data.txt", encoding="utf-8-sig") as f:
+    # with open("./input/mock_data.txt", encoding="utf-8-sig") as f:
+    # with open("./input/xiaoming.txt", encoding="utf-8-sig") as f:
+    with open("./kg_input/xiyouji.txt", encoding="utf-8-sig") as f:
         FAKE_TEXT = f.read()
     # print(FAKE_TEXT)
 
@@ -114,5 +131,5 @@ def insert():
 
 
 if __name__ == "__main__":
-    insert()
+    # insert()
     query()
