@@ -70,15 +70,14 @@ def load_data_in_batches(dataset_path, batch_size,
         raise e
 
 
-def read_html(batch_search_results):
+def read_html(search_results):
     text = ""
-    for idx, search_results in enumerate(batch_search_results):     
-        for html_text in search_results:
-            soup = BeautifulSoup(html_text["page_result"], "lxml")
-            text += soup.get_text(" ", strip=True)
-            if not text:
-                text=""
-    
+    for html_text in search_results:
+        soup = BeautifulSoup(html_text["page_result"], "lxml")
+        text += soup.get_text(" ", strip=True)
+        if not text:
+            text=""
+
     return text
 
 
