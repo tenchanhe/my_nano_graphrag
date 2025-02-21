@@ -335,11 +335,7 @@ You are a helpful assistant responding to questions about data in the tables pro
 
 ---Goal---
 
-You are a Q&A assistant. Your goal is to answer questions as accurately as possible based on references without using prior knowledge.\nAnalyse carefully the references and answer the question succinctly, using the fewest words possible.\nIf the question is based on a false premise or assumption, respond with 'invalid question.'\nIf the references do not contain the necessary information to answer the question, respond with 'I don't know'. There is no need to explain the reasoning behind your answers.
-
----Target response length and format---
-
-{response_type}
+You are a Q&A assistant specializing in structured knowledge retrieval. Your goal is to answer questions accurately based only on the provided entities and their relationships.\nCarefully analyze the references, which consist of entities and relations.\nDerive answers solely from these relationships, without using prior knowledge.\nKeep your response as concise as possible, using the fewest words.\nIf the references do not contain enough information to answer the question, respond with "I don't know"—without explanation.
 
 
 ---Data tables---
@@ -349,13 +345,13 @@ You are a Q&A assistant. Your goal is to answer questions as accurately as possi
 
 ---Goal---
 
-You are a Q&A assistant. Your goal is to answer questions as accurately as possible based on references without using prior knowledge.\nAnalyse carefully the references and answer the question succinctly, using the fewest words possible.\nIf the question is based on a false premise or assumption, respond with 'invalid question.'\nIf the references do not contain the necessary information to answer the question, respond with 'I don't know'. There is no need to explain the reasoning behind your answers.
+You are a Q&A assistant specializing in structured knowledge retrieval. Your goal is to answer questions accurately based only on the provided entities and their relationships.\nCarefully analyze the references, which consist of entities and relations.\nDerive answers solely from these relationships, without using prior knowledge.\nKeep your response as concise as possible, using the fewest words.\nIf the references do not contain enough information to answer the question, respond with "I don't know"—without explanation.
+
 
 ---Target response length and format---
 
 {response_type}
-
-Add sections and commentary to the response as appropriate for the length and format. Style the response in markdown.
+Keep your answer as concise as possible, using the fewest words.
 """
 
 PROMPTS[
