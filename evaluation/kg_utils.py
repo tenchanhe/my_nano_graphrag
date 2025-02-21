@@ -9,6 +9,7 @@ from nano_graphrag._utils import compute_args_hash, wrap_embedding_func_with_att
 from sentence_transformers import SentenceTransformer
 # from ollama import chat
 from functools import partial
+from custom_codes.graphrag_custom import MyGraphRAG
 
 logging.basicConfig(level=logging.WARNING)
 logging.getLogger("nano-graphrag").setLevel(logging.INFO)
@@ -82,7 +83,7 @@ def remove_if_exist(file):
 
 
 def kg_query(model, query, query_mode, work_dir):
-    rag = GraphRAG(
+    rag = MyGraphRAG(
         working_dir=work_dir,
         best_model_func=partial(ollama_model_if_cache, model=model),
         cheap_model_func=partial(ollama_model_if_cache, model=model),
@@ -100,7 +101,7 @@ def kg_insert(model, text, work_dir):
     remove_if_exist(f"{work_dir}/kv_store_community_reports.json")
     remove_if_exist(f"{work_dir}/graph_chunk_entity_relation.graphml")
 
-    rag = GraphRAG(
+    rag = MyGraphRAG(
         working_dir=work_dir,
         enable_llm_cache=True,
         best_model_func=partial(ollama_model_if_cache, model=model),

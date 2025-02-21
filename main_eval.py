@@ -9,7 +9,9 @@ if __name__ == "__main__":
     # from models.user_config import UserModel
 
     MODEL = "llama3.2"
+    EVAL_MODEL = "llama3.3"
     DATASET_PATH = "evaluation/data/dev_data.jsonl.bz2"
+    # DATASET_PATH = "evaluation/data/dev_data.jsonl.bz2"
     WORKING_DIR = "./nano_test_cache_ollama"
     BATCH_SIZE = 2
     dataset_setting={"sports": 10, "movie": 10, "finance": 10, "open": 10, "music": 10}
@@ -39,11 +41,12 @@ if __name__ == "__main__":
     
     for i in range(len(queries)):
         print("query: ", queries[i])
+        print("answer: ", ground_truths[i])
         print("predict: ", predictions[i])
         print()
 
     evaluation_results = evaluate_predictions(
-        queries, ground_truths, predictions, "llama3.2"
+        queries, ground_truths, predictions, EVAL_MODEL
     )
 
     # import ipdb;ipdb.set_trace()
