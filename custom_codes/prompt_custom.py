@@ -6,6 +6,10 @@ Reference:
 GRAPH_FIELD_SEP = "<SEP>"
 PROMPTS = {}
 
+PROMPTS["DEFAULT_ENTITY_TYPES"] = ["organization", "person", "geo", "event"]
+# PROMPTS["DEFAULT_ENTITY_TYPES"] = ["organization", "person", "location", "event", "object", "time"]
+# PROMPTS["DEFAULT_ENTITY_TYPES"] = ["administrativeArea", "article", "corporation", "degree entity", "discussion", "educationmajorentity", "educationalinstitution", "employmentcategory", "event", "image", "intangible", "landmark", "localbusiness", "miscellaneous", "organization", "person", "place", "post", "product" "role", "skill", "video"]
+
 PROMPTS[
     "claim_extraction"
 ] = """-Target activity-
@@ -321,7 +325,6 @@ PROMPTS[
 ] = """It appears some entities may have still been missed.  Answer YES | NO if there are still entities that need to be added.
 """
 
-PROMPTS["DEFAULT_ENTITY_TYPES"] = ["organization", "person", "geo", "event"]
 PROMPTS["DEFAULT_TUPLE_DELIMITER"] = "<|>"
 PROMPTS["DEFAULT_RECORD_DELIMITER"] = "##"
 PROMPTS["DEFAULT_COMPLETION_DELIMITER"] = "<|COMPLETE|>"

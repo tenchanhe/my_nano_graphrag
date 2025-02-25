@@ -705,6 +705,7 @@ async def _find_most_related_community_from_entities(
     _related_community_datas = await asyncio.gather(
         *[community_reports.get_by_id(k) for k in related_community_keys_counts.keys()]
     )
+    # breakpoint()
     related_community_datas = {
         k: v
         for k, v in zip(related_community_keys_counts.keys(), _related_community_datas)
@@ -848,12 +849,12 @@ async def _build_local_query_context(
     node_datas = await asyncio.gather(
         *[knowledge_graph_inst.get_node(r["entity_name"]) for r in results]
     )
-    # breakpoint()
     if not all([n is not None for n in node_datas]):
         logger.warning("Some nodes are missing, maybe the storage is damaged")
     node_degrees = await asyncio.gather(
         *[knowledge_graph_inst.node_degree(r["entity_name"]) for r in results]
     )
+    # breakpoint()
     node_datas = [
         {**n, "entity_name": k["entity_name"], "rank": d}
         for k, n, d in zip(results, node_datas, node_degrees)
@@ -960,6 +961,7 @@ async def local_query(
         query,
         system_prompt=sys_prompt,
     )
+    # print(context)
     # breakpoint()
     return response
 
@@ -1090,10 +1092,11 @@ Importance Score: {dp['score']}
     if query_param.only_need_context:
         return points_context
     # breakpoint()
+    print("context: ", points_context)
     sys_prompt_temp = PROMPTS["global_reduce_rag_response"]
     response = await use_model_func(
         query,
-        sys_prompt_temp.format(
+        system_prompt=sys_prompt_temp.format(
             report_data=points_context, response_type=query_param.response_type
         ),
     )

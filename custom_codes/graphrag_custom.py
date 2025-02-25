@@ -2,8 +2,13 @@ from dataclasses import asdict
 from nano_graphrag.graphrag import GraphRAG
 from nano_graphrag.base import QueryParam
 from custom_codes.op_custom import local_query, global_query
+from nano_graphrag._utils import always_get_an_event_loop
 
 class MyGraphRAG(GraphRAG):
+    def query(self, query: str, param: QueryParam = QueryParam()):
+        loop = always_get_an_event_loop()
+        return loop.run_until_complete(self.aquery(query, param))
+    
     async def aquery(self, query: str, param: QueryParam = QueryParam()):
         if param.mode == "local" and not self.enable_local:
             raise ValueError("enable_local is False, cannot query in local mode")

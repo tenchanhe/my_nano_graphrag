@@ -14,7 +14,6 @@ from custom_codes.graphrag_custom import MyGraphRAG
 logging.basicConfig(level=logging.WARNING)
 logging.getLogger("nano-graphrag").setLevel(logging.INFO)
 
-MODEL = "qwen2.5:32b"
 EMBEDDING_MODEL = "mxbai-embed-large:latest"
 EMBEDDING_MODEL_DIM = 1024
 EMBEDDING_MODEL_MAX_TOKENS = 8192
@@ -36,7 +35,7 @@ async def ollama_embedding(texts: list[str]) -> np.ndarray:
 
 
 async def ollama_model_if_cache(
-    prompt, model, system_prompt=None, history_messages=[], **kwargs
+    prompt, model, system_prompt=None, history_messages=[], **kwargs, 
 ) -> str:
     # print("kwars: ", kwargs)
     # breakpoint()
@@ -72,7 +71,7 @@ async def ollama_model_if_cache(
     # breakpoint()
     # Cache the response if having-------------------
     if hashing_kv is not None:
-        await hashing_kv.upsert({args_hash: {"return": result, "model": MODEL}})
+        await hashing_kv.upsert({args_hash: {"return": result, "model": model}})
     # -----------------------------------------------------
     return result
 
@@ -100,6 +99,7 @@ def kg_insert(model, text, work_dir):
     remove_if_exist(f"{work_dir}/kv_store_text_chunks.json")
     remove_if_exist(f"{work_dir}/kv_store_community_reports.json")
     remove_if_exist(f"{work_dir}/graph_chunk_entity_relation.graphml")
+    # remove_if_exist(f"{work_dir}/kv_store_llm_response_cache")
 
     rag = MyGraphRAG(
         working_dir=work_dir,

@@ -9,39 +9,53 @@ if __name__ == "__main__":
     # from models.user_config import UserModel
 
     MODEL = "llama3.2"
-    EVAL_MODEL = "llama3.3"
-    DATASET_PATH = "evaluation/data/dev_data.jsonl.bz2"
+    EVAL_MODEL = "qwen2.5:32b"
+    BATCH_SIZE = 10
+    
+    DATASET_PATH = "evaluation/data/crag_task_1_dev_v4_release.jsonl.bz2"
+    WORKING_DIR = "./nano_salesforce_cache_ollama"
+    
     # DATASET_PATH = "evaluation/data/dev_data.jsonl.bz2"
-    WORKING_DIR = "./nano_test_cache_ollama"
-    BATCH_SIZE = 2
+    # WORKING_DIR = "./nano_test_cache_ollama"
+    
     dataset_setting={"sports": 10, "movie": 10, "finance": 10, "open": 10, "music": 10}
-
+    set_query = 'where did the ceo of salesforce previously work?'
+    stop = False
 
     # Generate predictions
     queries, ground_truths, predictions = [], [], []
+    urls, types = [], []
 
     for batch in tqdm(load_data_in_batches(DATASET_PATH, BATCH_SIZE, dataset_setting), desc="Generating predictions"):
-        # index KG
-        # breakpoint()
         for i in range(len(batch['query'])):
-            # insert_text = read_html(batch['search_results'][i])
-            # kg_insert(MODEL, insert_text, WORKING_DIR)
+            if batch['query'][i] == set_query:
+                # # KG index(build KG)
+                # insert_text = read_html(batch['search_results'][i])
+                # kg_insert(MODEL, insert_text, WORKING_DIR)
             
-            # KG query
-            result = kg_query(MODEL, batch['query'][i], 'local', WORKING_DIR)
+                # KG query
+                result = kg_query(MODEL, batch['query'][i], 'global', WORKING_DIR)
 
-            # evaluation
-            # batch_ground_truths = batch.pop("answer")
-            
-            queries.append(batch["query"][i])
-            ground_truths.append(batch["answer"][i])
-            predictions.append(result)
+                # evaluation
+                # batch_ground_truths = batch.pop("answer")
+                
+                queries.append(batch["query"][i])
+                ground_truths.append(batch["answer"][i])
+                predictions.append(result)
+                # breakpoint()
+                urls.append([pages['page_url'] for pages in batch['search_results'][i]])
+                # breakpoint()
+                # types.append(batch['question_type'][i])
+
+                stop = True
+                break
+        if stop:
             break
-        break
     
     for i in range(len(queries)):
         print("query: ", queries[i])
         print("answer: ", ground_truths[i])
+        print(urls[i])
         print("predict: ", predictions[i])
         print()
 
