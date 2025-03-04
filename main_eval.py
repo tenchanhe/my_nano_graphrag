@@ -4,13 +4,12 @@ from evaluation.evaluation import evaluate_predictions
 from evaluation.kg_utils import kg_insert, kg_query
 
 
-
 if __name__ == "__main__":
-    # from models.user_config import UserModel
 
     MODEL = "llama3.2"
     EVAL_MODEL = "qwen2.5:32b"
     BATCH_SIZE = 10
+    QUERY_MODE = 'local'
     
     DATASET_PATH = "evaluation/data/crag_task_1_dev_v4_release.jsonl.bz2"
     WORKING_DIR = "./nano_salesforce_cache_ollama"
@@ -34,11 +33,9 @@ if __name__ == "__main__":
                 # kg_insert(MODEL, insert_text, WORKING_DIR)
             
                 # KG query
-                result = kg_query(MODEL, batch['query'][i], 'global', WORKING_DIR)
+                result = kg_query(MODEL, batch['query'][i], QUERY_MODE, WORKING_DIR)
 
                 # evaluation
-                # batch_ground_truths = batch.pop("answer")
-                
                 queries.append(batch["query"][i])
                 ground_truths.append(batch["answer"][i])
                 predictions.append(result)

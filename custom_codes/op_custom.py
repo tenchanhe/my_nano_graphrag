@@ -301,6 +301,7 @@ async def extract_entities(
     global_config: dict,
     using_amazon_bedrock: bool=False,
 ) -> Union[BaseGraphStorage, None]:
+
     use_llm_func: callable = global_config["best_model_func"]
     entity_extract_max_gleaning = global_config["entity_extract_max_gleaning"]
 
@@ -319,6 +320,7 @@ async def extract_entities(
     already_processed = 0
     already_entities = 0
     already_relations = 0
+
 
     async def _process_single_content(chunk_key_dp: tuple[str, TextChunkSchema]):
         nonlocal already_processed, already_entities, already_relations
@@ -811,7 +813,7 @@ async def _find_most_related_edges_from_entities(
             sorted_edge = tuple(sorted(e))
             if sorted_edge not in seen:
                 seen.add(sorted_edge)
-                all_edges.append(sorted_edge) 
+                all_edges.append(sorted_edge)
                 
     all_edges_pack = await asyncio.gather(
         *[knowledge_graph_inst.get_edge(e[0], e[1]) for e in all_edges]
@@ -819,6 +821,7 @@ async def _find_most_related_edges_from_entities(
     all_edges_degree = await asyncio.gather(
         *[knowledge_graph_inst.edge_degree(e[0], e[1]) for e in all_edges]
     )
+    # breakpoint()
     all_edges_data = [
         {"src_tgt": k, "rank": d, **v}
         for k, v, d in zip(all_edges, all_edges_pack, all_edges_degree)
@@ -832,6 +835,7 @@ async def _find_most_related_edges_from_entities(
         key=lambda x: x["description"],
         max_token_size=query_param.local_max_token_for_local_context,
     )
+    # breakpoint()
     return all_edges_data
 
 
@@ -860,18 +864,21 @@ async def _build_local_query_context(
         for k, n, d in zip(results, node_datas, node_degrees)
         if n is not None
     ]
-    use_communities = await _find_most_related_community_from_entities(
-        node_datas, query_param, community_reports
-    )
-    use_text_units = await _find_most_related_text_unit_from_entities(
-        node_datas, query_param, text_chunks_db, knowledge_graph_inst
-    )
+    # use_communities = await _find_most_related_community_from_entities(
+    #     node_datas, query_param, community_reports
+    # )
+    # use_text_units = await _find_most_related_text_unit_from_entities(
+    #     node_datas, query_param, text_chunks_db, knowledge_graph_inst
+    # )
     use_relations = await _find_most_related_edges_from_entities(
         node_datas, query_param, knowledge_graph_inst
     )
     # breakpoint()
+    # logger.info(
+    #     f"Using {len(node_datas)} entites, {len(use_communities)} communities, {len(use_relations)} relations, {len(use_text_units)} text units"
+    # )
     logger.info(
-        f"Using {len(node_datas)} entites, {len(use_communities)} communities, {len(use_relations)} relations, {len(use_text_units)} text units"
+        f"Using {len(node_datas)} entites, {len(use_relations)} relations"
     )
     entites_section_list = [["id", "entity", "type", "description", "rank"]]
     for i, n in enumerate(node_datas):
@@ -902,20 +909,34 @@ async def _build_local_query_context(
         )
     relations_context = list_of_list_to_csv(relations_section_list)
 
-    communities_section_list = [["id", "content"]]
-    for i, c in enumerate(use_communities):
-        communities_section_list.append([i, c["report_string"]])
-    communities_context = list_of_list_to_csv(communities_section_list)
+    # communities_section_list = [["id", "content"]]
+    # for i, c in enumerate(use_communities):
+    #     communities_section_list.append([i, c["report_string"]])
+    # communities_context = list_of_list_to_csv(communities_section_list)
 
-    text_units_section_list = [["id", "content"]]
-    for i, t in enumerate(use_text_units):
-        text_units_section_list.append([i, t["content"]])
-    text_units_context = list_of_list_to_csv(text_units_section_list)
+    # text_units_section_list = [["id", "content"]]
+    # for i, t in enumerate(use_text_units):
+    #     text_units_section_list.append([i, t["content"]])
+    # text_units_context = list_of_list_to_csv(text_units_section_list)
+#     return f"""
+# -----Reports-----
+# ```csv
+# {communities_context}
+# ```
+# -----Entities-----
+# ```csv
+# {entities_context}
+# ```
+# -----Relationships-----
+# ```csv
+# {relations_context}
+# ```
+# -----Sources-----
+# ```csv
+# {text_units_context}
+# ```
+# """
     return f"""
------Reports-----
-```csv
-{communities_context}
-```
 -----Entities-----
 ```csv
 {entities_context}
@@ -924,12 +945,7 @@ async def _build_local_query_context(
 ```csv
 {relations_context}
 ```
------Sources-----
-```csv
-{text_units_context}
-```
 """
-
 
 async def local_query(
     query,
@@ -940,6 +956,7 @@ async def local_query(
     query_param: QueryParam,
     global_config: dict,
 ) -> str:
+    query_param.response_type = "Just Simple Answer"
     use_model_func = global_config["best_model_func"]
     context = await _build_local_query_context(
         query,

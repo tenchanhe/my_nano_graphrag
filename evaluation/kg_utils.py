@@ -99,7 +99,7 @@ def kg_insert(model, text, work_dir):
     remove_if_exist(f"{work_dir}/kv_store_text_chunks.json")
     remove_if_exist(f"{work_dir}/kv_store_community_reports.json")
     remove_if_exist(f"{work_dir}/graph_chunk_entity_relation.graphml")
-    # remove_if_exist(f"{work_dir}/kv_store_llm_response_cache")
+    remove_if_exist(f"{work_dir}/kv_store_llm_response_cache")
 
     rag = MyGraphRAG(
         working_dir=work_dir,

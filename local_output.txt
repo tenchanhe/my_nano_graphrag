@@ -1,0 +1,67 @@
+
+-----Entities-----
+```csv
+"id",	"entity",	"type",	"description",	"rank"
+0,	"SAM RIVERA",	"PERSON",	"Sam Rivera works for Salesforce as an employee.",	0
+1,	"MARK HAWKINS",	"PERSON",	"Mark Hawkins is a former CFO at Salesforce.",	0
+2,	"KEITH BLOCK",	"PERSON",	"Keith Block stepped down as co-chief executive officer of Salesforce.",	0
+3,	"SALESFORCE TOWER",	"LOCATION",	"Salesforce Tower in San Francisco, California, serves as the headquarters of Salesforce.",	0
+4,	"TOKYO ",	"GEO",	"Tokyo is headquarters location of Salesforce.",	0
+5,	"BENIOFF ",	"PERSON",	"Benioff is a CEO of Salesforce and a thought leader who publishes books on business and technology.",	0
+6,	"SALESFORCE",	"ORGANIZATION",	"Salesforce is a cloud-based software company with multiple acquisitions and partnerships."<SEP>"Salesforce is a company founded by Marc Benioff and is the subject of various articles and news stories."<SEP>"Salesforce is a company founded by Marc Benioff, employing thousands and being the largest employer in San Francisco."<SEP>"Salesforce is a company providing customer relationship management software and services."<SEP>"Salesforce is a company that has made several acquisitions and investments."<SEP>"Salesforce is a company that leverages technology, people, and resources to improve communities around the world."<SEP>"Salesforce is a company that provides customer relationship management and other business applications."<SEP>"Salesforce is a company that provides customer relationship management solutions, demonstrating its role in supporting businesses."<SEP>"Salesforce is a company that provides software solutions, including customer relationship management tools."<SEP>"Salesforce is a large organization that owns and operates various products and services, including Desk.com, Do.com, and Heroku."<SEP>"Salesforce is a leading cloud-based software company, mentioned multiple times in the text."<SEP>"Salesforce is a leading customer relationship management company with over $4 billion annual revenue and 36,000 employees worldwide."<SEP>"Salesforce is a leading enterprise software vendor."<SEP>"Salesforce is a multinational cloud computing company providing customer relationship management services."<SEP>"Salesforce is a multinational organization with over 25,000 employees across 25 countries."<SEP>"Salesforce is a multinational software company founded by Marc Benioff, known for its customer relationship management (CRM) software."<SEP>"Salesforce is a software company founded by Marc Benioff."<SEP>"Salesforce is a technology company co-founded by Marc Benioff, which has made significant contributions to various social causes."<SEP>"Salesforce is a technology company providing cloud-based software solutions."<SEP>"Salesforce is an organization mentioned in the article."<SEP>"Salesforce is an organization that provides software solutions."<SEP>"Salesforce is the company that employs Marc Benioff and develops software products such as Marketing Cloud and Customer Success Platform.",	28
+7,	"AMY WEAVER",	"PERSON",	"Amy Weaver is a CFO at Salesforce.",	0
+8,	"BENIOFF",	"PERSON",	"Benioff is a CEO of Salesforce and a thought leader who publishes books on business and technology."<SEP>"Benioff is the CEO of Salesforce and has made recent statements about his leadership style.",	0
+9,	"MARC BENIOFF",	"PERSON",	"Marc Benioff is CEO and Chairman of Salesforce."<SEP>"Marc Benioff is a CEO of Salesforce, chairman, and chief executive officer."<SEP>"Marc Benioff is a CEO of Salesforce, investor, and philanthropist."<SEP>"Marc Benioff is a CEO of Salesforce, leading the organization."<SEP>"Marc Benioff is a CEO of Salesforce, making business decisions and predictions about its future."<SEP>"Marc Benioff is a CEO of Salesforce, showing leadership and entrepreneurial qualities."<SEP>"Marc Benioff is a CEO of Salesforce, showing leadership qualities."<SEP>"Marc Benioff is a CEO who leads the company Salesforce."<SEP>"Marc Benioff is a billionaire CEO of Salesforce, known for his philanthropic efforts and commitment to social causes."<SEP>"Marc Benioff is a co-founder and CEO of Salesforce, demonstrating leadership and vision in the company's early stages."<SEP>"Marc Benioff is a former Oracle executive and the Chairman & CEO of Salesforce."<SEP>"Marc Benioff is a person who leads Salesforce."<SEP>"Marc Benioff is a tech billionaire and CEO of Salesforce."<SEP>"Marc Benioff is an American internet entrepreneur and philanthropist."<SEP>"Marc Benioff is an influential figure in philanthropy and technology, with significant donations to various causes."<SEP>"Marc Benioff is the CEO of Salesforce and a recognized innovator in the tech industry."<SEP>"Marc Benioff is the CEO of Salesforce and a recognized innovator."<SEP>"Marc Benioff is the CEO of Salesforce, known for his concept of Ohana as part of the company's corporate culture."<SEP>"Marc Benioff is the CEO of Salesforce, leading the company's growth and development.",	3
+10,	"ONE MARKET STREET",	"LOCATION",	"One Market Street is new office location of Salesforce after the dot-com bubble burst."<SEP>"One Market Street is the new location of Salesforce's business, which is larger than its previous one in the Rincon Center.",	0
+11,	"TOKYO",	"GEO",	"The Tokyo office of Salesforce serves as another location where the company operates."<SEP>"Tokyo is another geographical location where Salesforce has its headquarters."<SEP>"Tokyo is headquarters location of Salesforce."<SEP>"Tokyo",	0
+12,	"BRET TAYLOR",	"PERSON",	"Bret Taylor is a co-CEO of Salesforce alongside Marc Benioff, having previously served as CEO."<SEP>"Bret Taylor is a co-CEO of Salesforce, serving as the company's president and COO."<SEP>"Bret Taylor was the vice chair and co-CEO of Salesforce.",	0
+13,	"RINCON CENTER",	"LOCATION",	"The Rincon Center is a location where Salesforce's business initially moved, before expanding to a larger base at One Market Street.",	0
+14,	"SAN FRANCISCO",	"LOCATION",	"San Francisco is a city with a technology industry, including companies like Salesforce."<SEP>"San Francisco is a location where Salesforce Tower opens and Dreamforce takes place."<SEP>"San Francisco is the city where Marc Benioff grew up and now lives."<SEP>"San Francisco, California, is the location where Salesforce is headquartered.",	1
+15,	"SALESFORCE.ORG",	"ORGANIZATION",	"Salesforce.org is a charitable organization founded by Marc Benioff, highlighting the company's commitment to giving back.",	0
+16,	"NEW YORK",	"GEO",	"New York is a location where Salesforce Tower opens.",	0
+17,	"DAVE MOELLENHOFF",	"PERSON",	"Dave Moellenhoff is a co-founder of Salesforce and worked on the first version of the company's CRM."<SEP>"Dave Moellenhoff is a co-founder of Salesforce, along with Marc Benioff, Parker Harris, and Frank Dominguez.",	0
+18,	"FRANK DOMINGUEZ",	"PERSON",	"Frank Dominguez is Co-founder and VP of Sales at Salesforce."<SEP>"Frank Dominguez is a co-founder of Salesforce and contributed to the development of the company's early CRM version."<SEP>"Frank Dominguez is a co-founder of Salesforce, along with Marc Benioff, Parker Harris, and Dave Moellenhoff.",	0
+19,	"CLICKSOFTWARE",	"TECHNOLOGY ",	"ClickSoftware provides customer service software that was acquired by Salesforce.",	0
+```
+-----Relationships-----
+```csv
+"id",	"source",	"target",	"description",	"weight",	"rank"
+0,	"PHISHING",	"SALESFORCE",	"Salesforce sacks two top security engineers for their DEF CON talk"<SEP>"発達障害の女性、大手IT・セールスフォースを提訴「合理的配慮を受けられず、雇い止めされた」弁護士ドットコム 2021年7月20日"<SEP>"発達障害当事者が障害者採用で入社したにも関わらず、合理的配慮の提供を受けられず、休職を余儀なくされた上、雇止めにされた事例で、訴訟を提起いたしました－セールスフォース・ドットコム事件 自由法曹団東京支部ニュース2021年8月号",	63.0,	31
+1,	"MARC BENIOFF",	"SALESFORCE",	"Marc Benioff founded Salesforce and is its CEO."<SEP>"Marc Benioff leads Salesforce, driving growth and innovation of the company.",	27.0,	31
+2,	"ACUMEN SOLUTIONS ",	"SALESFORCE",	"Salesforce steps into RPA buying Servicetrace and teaming it with MuleSoft",	13.0,	30
+3,	"SALESFORCE",	"WORLD’S MOST ADMIRED",	"Salesforce receives the World’s Most Admired award, recognizing its commitment to excellence and leadership in the industry.",	9.0,	30
+4,	"SALESFORCE",	"WORLD’S BEST WORKPLACE",	"Salesforce is recognized as the World’s Best Workplace with a strong focus on employee satisfaction and engagement.",	8.0,	30
+5,	"EUGENE KIM ",	"SALESFORCE",	"Eugene Kim is an author who wrote about Salesforce's acquisition of Twin Prime.",	19.0,	29
+6,	"SALESFORCE",	"SPIFF ",	"Salesforce acquires automated commission management platform Spiff",	17.0,	29
+7,	"AIRKIT.AI ",	"SALESFORCE",	"Salesforce to acquire Airkit.ai, a low-code platform for building AI customer service agents",	16.0,	29
+8,	"SALESFORCE",	"TROOPS.AI ",	"Salesforce acquires Slack-bot maker Troops.ai",	15.0,	29
+9,	"SALESFORCE",	"SERVICETRACE ",	"Salesforce, Inc. acquired Phennecs for $16.4 million",	14.0,	29
+10,	"PHENNECS ",	"SALESFORCE",	"Salesforce, Inc. acquired Phennecs for $16.4 million",	12.0,	29
+11,	"CLICKSOFTWARE ",	"SALESFORCE",	"Salesforce is acquiring ClickSoftware for $1.35B",	11.0,	29
+12,	"SALESFORCE",	"SLACK ",	"Salesforce completes $27.7B Slack acquisition",	10.0,	29
+13,	"SALESFORCE",	"UCSF",	"Salesforce has a long-standing partnership with UCSF, providing funding and resources for medical research and innovation.",	9.0,	29
+14,	"SALESFORCE",	"WHATSAPP",	"Salesforce integrated WhatsApp with its Customer 360 platform.",	9.0,	29
+15,	"SALESFORCE",	"TWIN PRIME",	"Salesforce acquires Twin Prime, adding to its $5 billion buying binge.",	9.0,	29
+16,	"EXXONMOBIL",	"SALESFORCE",	"Salesforce replaced ExxonMobil in the Dow Jones Industrial Average.",	8.0,	29
+17,	"SALESFORCE",	"TABLEAU ",	"Salesforce closes $15.7B Tableau deal",	8.0,	29
+18,	"AWARDS AND RECOGNITION",	"SALESFORCE",	"Salesforce Named to World’s Most Ethical Companies List for 15th Time.",	8.0,	29
+19,	"SALESFORCE",	"STEELBRICK",	"Salesforce buys quote-to-cash company SteelBrick for $360 million",	7.0,	29
+20,	"DEFINITIVE AGREEMENT",	"SALESFORCE",	"Salesforce Signs Definitive Agreement to Acquire Slack.",	7.0,	29
+21,	"QUIP",	"SALESFORCE",	"Salesforce buys word processing app Quip for $750M",	6.0,	29
+22,	"MOST SUSTAINABLE COMPANY",	"SALESFORCE",	"Salesforce receives recognition for its commitment to sustainability with the Most Sustainable Company award.",	6.0,	29
+23,	"DEMANDWARE ",	"SALESFORCE",	"Salesforce buys Demandware for $2.8B, taking a big step into e-commerce",	5.0,	29
+24,	"SALESFORCE",	"SEQUENCE">",	"Salesforce acquires Sequence to build out its UX design services",	4.0,	29
+25,	"MULESOFT",	"SALESFORCE",	"Salesforce buys MuleSoft in a deal worth 6.5 billion",	3.0,	29
+26,	"REBEL ",	"SALESFORCE",	"Salesforce acquires Rebel, maker of 'interactive' email services, to expand its Marketing Cloud",	2.0,	29
+27,	"DATORAMA ",	"SALESFORCE",	"Salesforce agrees to acquire Datorama",	1.0,	29
+28,	"MARC BENIOFF",	"TIME MAGAZINE",	"Marc Benioff owns Time magazine since 2018.",	14.0,	4
+29,	"LYNNE BENIOFF",	"MARC BENIOFF",	"The couple is involved in various charitable initiatives together, including philanthropic efforts for education, healthcare, and environmental causes.",	7.0,	4
+30,	"BURLINGAME HIGH SCHOOL",	"SAN FRANCISCO",	"San Francisco is where Marc Benioff grew up and graduated from high school.",	12.0,	2
+```
+
+query:  where did the ceo of salesforce previously work?
+answer:  marc benioff spent 13 years at oracle, before launching salesforce.
+['https://www.salesforce.com/news/stories/the-history-of-salesforce/', 'https://en.wikipedia.org/wiki/Marc_Benioff', 'https://www.salesforce.com/company/leadership/', 'https://en.wikipedia.org/wiki/Salesforce', 'https://www.salesforce.com/news/stories/the-history-of-salesforce/']
+predict:  According to the relationships table, Marc Benioff, the CEO of Salesforce, was a former Oracle executive before co-founding Salesforce.
+
+{'score': 1.0, 'exact_accuracy': 0.0, 'accuracy': 1.0, 'hallucination': 0.0, 'missing': 0.0, 'n_miss': 0, 'n_correct': 1, 'n_correct_exact': 0, 'total': 1}

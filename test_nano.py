@@ -2,12 +2,9 @@ import os
 import logging
 import ollama
 import numpy as np
-from nano_graphrag import GraphRAG, QueryParam
-from nano_graphrag import GraphRAG, QueryParam
+from custom_codes.graphrag_custom import MyGraphRAG, QueryParam
 from nano_graphrag.base import BaseKVStorage
 from nano_graphrag._utils import compute_args_hash, wrap_embedding_func_with_attrs
-from sentence_transformers import SentenceTransformer
-from ollama import chat
 
 logging.basicConfig(level=logging.WARNING)
 logging.getLogger("nano-graphrag").setLevel(logging.INFO)
@@ -92,7 +89,7 @@ def remove_if_exist(file):
 
 
 def query():
-    rag = GraphRAG(
+    rag = MyGraphRAG(
         working_dir=WORKING_DIR,
         best_model_func=ollama_model_if_cache,
         cheap_model_func=ollama_model_if_cache,
@@ -119,7 +116,7 @@ def insert():
     remove_if_exist(f"{WORKING_DIR}/kv_store_community_reports.json")
     remove_if_exist(f"{WORKING_DIR}/graph_chunk_entity_relation.graphml")
 
-    rag = GraphRAG(
+    rag = MyGraphRAG(
         working_dir=WORKING_DIR,
         enable_llm_cache=True,
         best_model_func=ollama_model_if_cache,
@@ -134,5 +131,5 @@ def insert():
 
 
 if __name__ == "__main__":
-    insert()
+    # insert()
     query()
