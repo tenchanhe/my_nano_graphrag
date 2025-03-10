@@ -2,12 +2,9 @@ import os
 import logging
 import ollama
 import numpy as np
-from nano_graphrag import GraphRAG, QueryParam
-from nano_graphrag import GraphRAG, QueryParam
+from custom_codes.graphrag_custom import MyGraphRAG, QueryParam
 from nano_graphrag.base import BaseKVStorage
 from nano_graphrag._utils import compute_args_hash, wrap_embedding_func_with_attrs
-from sentence_transformers import SentenceTransformer
-from ollama import chat
 
 logging.basicConfig(level=logging.WARNING)
 logging.getLogger("nano-graphrag").setLevel(logging.INFO)
@@ -26,18 +23,24 @@ WORKING_DIR = "./nano_xiaoming_cache_ollama"
 
 # MODEL = "qwen2.5:32b"
 
-EMBED_MODEL = SentenceTransformer(
-    "sentence-transformers/all-MiniLM-L6-v2", cache_folder=WORKING_DIR, device=None
-)
+EMBEDDING_MODEL = "mxbai-embed-large:latest"
+EMBEDDING_MODEL_DIM = 1024
+EMBEDDING_MODEL_MAX_TOKENS = 8192
 
 
-# We're using Sentence Transformers to generate embeddings for the BGE model
 @wrap_embedding_func_with_attrs(
-    embedding_dim=EMBED_MODEL.get_sentence_embedding_dimension(),
-    max_token_size=EMBED_MODEL.max_seq_length,
+    embedding_dim=EMBEDDING_MODEL_DIM,
+    max_token_size=EMBEDDING_MODEL_MAX_TOKENS,
 )
-async def local_embedding(texts: list[str]) -> np.ndarray:
-    return EMBED_MODEL.encode(texts, normalize_embeddings=True)
+async def ollama_embedding(texts: list[str]) -> np.ndarray:
+    ollama_client = ollama.Client(host='http://140.119.164.70:11435')
+    embed_text = []
+    for text in texts:
+        data = ollama_client.embed(model=EMBEDDING_MODEL, input=text)
+        # breakpoint()
+        embed_text.append(data.embeddings[0])
+
+    return embed_text
 
 
 async def ollama_model_if_cache(
@@ -86,11 +89,11 @@ def remove_if_exist(file):
 
 
 def query():
-    rag = GraphRAG(
+    rag = MyGraphRAG(
         working_dir=WORKING_DIR,
         best_model_func=ollama_model_if_cache,
         cheap_model_func=ollama_model_if_cache,
-        embedding_func=local_embedding,
+        embedding_func=ollama_embedding,
     )
     print(
         # rag.query("這個故事的主題是什麼？", param=QueryParam(mode="global"))
@@ -113,12 +116,12 @@ def insert():
     remove_if_exist(f"{WORKING_DIR}/kv_store_community_reports.json")
     remove_if_exist(f"{WORKING_DIR}/graph_chunk_entity_relation.graphml")
 
-    rag = GraphRAG(
+    rag = MyGraphRAG(
         working_dir=WORKING_DIR,
         enable_llm_cache=True,
         best_model_func=ollama_model_if_cache,
         cheap_model_func=ollama_model_if_cache,
-        embedding_func=local_embedding,
+        embedding_func=ollama_embedding,
     )
     start = time()
     rag.insert(FAKE_TEXT)

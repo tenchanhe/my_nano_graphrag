@@ -70,58 +70,12 @@ def load_data_in_batches(dataset_path, batch_size,
         raise e
 
 
-def read_html(batch_search_results):
+def read_html(search_results):
     text = ""
-    for idx, search_results in enumerate(batch_search_results):     
-        for html_text in search_results:
-            soup = BeautifulSoup(html_text["page_result"], "lxml")
-            text += soup.get_text(" ", strip=True)
-            if not text:
-                text=""
-    
+    for html_text in search_results:
+        soup = BeautifulSoup(html_text["page_result"], "lxml")
+        text += soup.get_text(" ", strip=True)
+        if not text:
+            text=""
+
     return text
-
-
-def process_bz2_file(file_path):
-    """逐行處理 .bz2 檔案"""
-    domain_counter = defaultdict(int)
-    first_record_keys = None
-    num_records = 0
-
-    with bz2.open(file_path, "rt", encoding="utf-8") as f:
-        for line in f:
-            record = json.loads(line)
-            num_records += 1
-
-            # 記錄第一筆資料的 key
-            if first_record_keys is None:
-                first_record_keys = list(record.keys())
-
-            # 統計 domain 欄位
-            if "domain" in record:
-                domain = record["domain"]
-                domain_counter[domain] += 1
-
-    return first_record_keys, num_records, domain_counter
-
-def main():
-    # 檔案路徑
-    file_path = "data/crag_task_1_dev_v4_release.jsonl.bz2"  # 替換為你的 .bz2 檔案路徑
-
-    # 處理檔案
-    first_record_keys, num_records, domain_counter = process_bz2_file(file_path)
-
-    # 顯示第一筆資料的 key
-    if first_record_keys:
-        print("第一筆資料的 key:", first_record_keys)
-
-    # 統計資料筆數
-    print(f"資料總筆數: {num_records}")
-
-    # 輸出 domain 統計結果
-    print("\ndomain 欄位的值出現次數:")
-    for domain, count in domain_counter.items():
-        print(f"{domain}: {count} 次")
-
-if __name__ == "__main__":
-    main()

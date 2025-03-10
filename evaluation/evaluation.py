@@ -73,7 +73,8 @@ def parse_response(resp: str):
 #     return trimmed_prediction
 
 def attempt_ollama_call(model_name, messages):
-    ollama_client = ollama.AsyncClient(host='http://140.119.164.70:11435')
+    ollama_client = ollama.Client(host='http://140.119.164.70:11435')
+    # breakpoint()
 
     try:        
         response = ollama_client.chat(model=model_name, messages=messages)
@@ -88,6 +89,7 @@ def evaluate_predictions(queries, ground_truths, predictions, evaluation_model_n
     n_miss, n_correct, n_correct_exact = 0, 0, 0
     system_message = get_system_message()
 
+    # breakpoint()
     for _idx, prediction in enumerate(tqdm(
         predictions, total=len(predictions), desc="Evaluating Predictions"
     )):
@@ -115,6 +117,7 @@ def evaluate_predictions(queries, ground_truths, predictions, evaluation_model_n
 
         # 使用 Ollama 進行推理
         response = attempt_ollama_call(evaluation_model_name, messages)
+        # breakpoint( )
         if response:
             # log_response(messages, response)
             eval_res = parse_response(response)
