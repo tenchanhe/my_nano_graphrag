@@ -1,5 +1,3 @@
-# Project Name
-
 This project is built upon **nano graphrag**, extending its functionality to enhance performance and usability. Before using this repository, you must first install **nano graphrag**.
 
 ## Installation
