@@ -6,8 +6,10 @@ This project is built upon **nano graphrag**, extending its functionality to enh
 pip install -r requirements.txt
 ```
 
+## Comparison Table
+[link](https://docs.google.com/spreadsheets/d/1-r-trFgagbsvDAy9pBdlOmLO2pTpx2h2OrCUngu1Vmk/edit?usp=sharing)
 
-| Index Step       | graphRAG(microsoft)                      | nano graphrag                               | lightRAG | try            |
+<!-- | Index Step       | graphRAG(microsoft)                      | nano graphrag                               | lightRAG | try            |
 | ---------------- | ---------------------------------------- | ------------------------------------------- | -------- | -------------- |
 | chunk docs       |                                          | overlap_token_size=128, max_token_size=1024 |          | semantic chunk |
 | extract entity   | extract entities prompt                  | extract entities prompt                     |          |                |
@@ -34,4 +36,4 @@ pip install -r requirements.txt
 | -------------------------- | ------------------- | ------------------- | -------- | --- |
 | community similarity score |                     | LLM rating          |          |     |
 | response prompt            |                     | Multiple Paragraphs |          |     |
-|                            |                     |                     |          |     |
+|                            |                     |                     |          |     | -->
