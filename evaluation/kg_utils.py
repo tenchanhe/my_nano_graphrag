@@ -10,6 +10,7 @@ from sentence_transformers import SentenceTransformer
 # from ollama import chat
 from functools import partial
 from custom_codes.graphrag_custom import MyGraphRAG
+from custom_codes.config_setting import HOST
 
 logging.basicConfig(level=logging.WARNING)
 logging.getLogger("nano-graphrag").setLevel(logging.INFO)
@@ -24,7 +25,11 @@ EMBEDDING_MODEL_MAX_TOKENS = 8192
     max_token_size=EMBEDDING_MODEL_MAX_TOKENS,
 )
 async def ollama_embedding(texts: list[str]) -> np.ndarray:
-    ollama_client = ollama.Client(host='http://140.119.164.70:11435')
+    # ollama_client = ollama.Client(host='http://140.119.164.70:11435')
+    ollama_client = ollama.Client(
+        host=HOST,
+        headers={'authorization': 'Bearer chten:u1rRsAhk1hNY6gHMqr4t4F2Dm5QOeKzy'}
+    )
     embed_text = []
     for text in texts:
         data = ollama_client.embed(model=EMBEDDING_MODEL, input=text)
@@ -44,6 +49,10 @@ async def ollama_model_if_cache(
     kwargs.pop("response_format", None)
 
     ollama_client = ollama.AsyncClient(host='http://140.119.164.70:11435')
+    # ollama_client = ollama.AsyncClient(
+    #     host='http://140.119.164.60:8080',
+    #     headers={'authorization': 'Bearer chten:u1rRsAhk1hNY6gHMqr4t4F2Dm5QOeKzy'}
+    # )
     messages = []
     if system_prompt:
         messages.append({"role": "system", "content": system_prompt})
@@ -81,14 +90,14 @@ def remove_if_exist(file):
         os.remove(file)
 
 
-def kg_query(model, query, query_mode, work_dir):
+def kg_query(model, query, work_dir, query_param):
     rag = MyGraphRAG(
         working_dir=work_dir,
         best_model_func=partial(ollama_model_if_cache, model=model),
         cheap_model_func=partial(ollama_model_if_cache, model=model),
         embedding_func=ollama_embedding,
     )
-    return rag.query(query, param=QueryParam(mode=query_mode))
+    return rag.query(query, param=query_param)
 
 
 def kg_insert(model, text, work_dir):
@@ -99,7 +108,7 @@ def kg_insert(model, text, work_dir):
     remove_if_exist(f"{work_dir}/kv_store_text_chunks.json")
     remove_if_exist(f"{work_dir}/kv_store_community_reports.json")
     remove_if_exist(f"{work_dir}/graph_chunk_entity_relation.graphml")
-    remove_if_exist(f"{work_dir}/kv_store_llm_response_cache")
+    # remove_if_exist(f"{work_dir}/kv_store_llm_response_cache")
 
     rag = MyGraphRAG(
         working_dir=work_dir,

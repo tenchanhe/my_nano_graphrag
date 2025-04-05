@@ -4,6 +4,7 @@ nano*/
 evaluation/data/*
 test_code/
 *.txt
+working_folder/
 
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python

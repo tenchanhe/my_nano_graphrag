@@ -322,7 +322,7 @@ PROMPTS[
 
 PROMPTS[
     "entiti_if_loop_extraction"
-] = """It appears some entities may have still been missed.  Answer YES | NO if there are still entities that need to be added.
+] = """x
 """
 
 PROMPTS["DEFAULT_TUPLE_DELIMITER"] = "<|>"
@@ -330,7 +330,7 @@ PROMPTS["DEFAULT_RECORD_DELIMITER"] = "##"
 PROMPTS["DEFAULT_COMPLETION_DELIMITER"] = "<|COMPLETE|>"
 
 PROMPTS[
-    "local_rag_response"
+    "local_rag_response_ori"
 ] = """---Role---
 
 You are a helpful assistant responding to questions about data in the tables provided.
@@ -338,7 +338,13 @@ You are a helpful assistant responding to questions about data in the tables pro
 
 ---Goal---
 
-You are a Q&A assistant specializing in structured knowledge retrieval. Your goal is to answer questions accurately based only on the provided entities and their relationships.\nCarefully analyze the references, which consist of entities and relations.\nDerive answers solely from these relationships, without using prior knowledge.\nKeep your response as concise as possible, using the fewest words.\nIf the references do not contain enough information to answer the question, respond with "I don't know"—without explanation.
+Generate a response of the target length and format that responds to the user's question, summarizing all information in the input data tables appropriate for the response length and format, and incorporating any relevant general knowledge.
+If you don't know the answer, just say so. Do not make anything up.
+Do not include information where the supporting evidence for it is not provided.
+
+---Target response length and format---
+
+{response_type}
 
 
 ---Data tables---
@@ -348,13 +354,18 @@ You are a Q&A assistant specializing in structured knowledge retrieval. Your goa
 
 ---Goal---
 
-You are a Q&A assistant specializing in structured knowledge retrieval. Your goal is to answer questions accurately based only on the provided entities and their relationships.\nCarefully analyze the references, which consist of entities and relations.\nDerive answers solely from these relationships, without using prior knowledge.\nKeep your response as concise as possible, using the fewest words.\nIf the references do not contain enough information to answer the question, respond with "I don't know"—without explanation.
+Generate a response of the target length and format that responds to the user's question, summarizing all information in the input data tables appropriate for the response length and format, and incorporating any relevant general knowledge.
+
+If you don't know the answer, just say so. Do not make anything up.
+
+Do not include information where the supporting evidence for it is not provided.
 
 
 ---Target response length and format---
 
 {response_type}
-Keep your answer as concise as possible, using the fewest words.
+
+Add sections and commentary to the response as appropriate for the length and format. Style the response in markdown.
 """
 
 PROMPTS[
@@ -412,6 +423,34 @@ The response should be JSON formatted as follows:
         {{"description": "Description of point 2", "score": score_value}}
     ]
 }}
+"""
+
+PROMPTS[
+    "local_rag_response_simple"
+] = """---Role---
+
+You are a helpful assistant responding to questions about data in the tables provided.
+
+
+---Goal---
+
+You are a Q&A assistant specializing in structured knowledge retrieval. Your goal is to answer questions accurately based only on the provided entities and their relationships.\nCarefully analyze the references, which consist of entities and relations.\nDerive answers solely from these relationships, without using prior knowledge.\nKeep your response as concise as possible, using the fewest words.\nIf the references do not contain enough information to answer the question, respond with "I don't know"—without explanation.
+
+
+---Data tables---
+
+{context_data}
+
+
+---Goal---
+
+You are a Q&A assistant specializing in structured knowledge retrieval. Your goal is to answer questions accurately based only on the provided entities and their relationships.\nCarefully analyze the references, which consist of entities and relations.\nDerive answers solely from these relationships, without using prior knowledge.\nKeep your response as concise as possible, using the fewest words.\nIf the references do not contain enough information to answer the question, respond with "I don't know"—without explanation.
+
+
+---Target response length and format---
+
+{response_type}
+Keep your answer as concise as possible, using the fewest words.
 """
 
 PROMPTS[

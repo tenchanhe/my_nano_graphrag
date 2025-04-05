@@ -7,20 +7,7 @@ from bs4 import BeautifulSoup
 
 def load_data_in_batches(dataset_path, batch_size, 
                          domain_counts={"sports": 10, "movie": 10, "finance": 10, "open": 10, "music": 10}):
-    """
-    Generator function that reads data from a compressed file and yields batches of data.
-    Each batch is a dictionary containing lists of interaction_ids, queries, search results, query times, and answers.
-    Additionally, it allows limiting the number of items per domain.
 
-    Args:
-    dataset_path (str): Path to the dataset file.
-    batch_size (int): Number of data items in each batch.
-    domain_counts (dict): A dictionary specifying the maximum number of items per domain.
-                         Example: {"sports": 100, "movie": 50, "finance": 200, "open": 300, "music": 150}
-
-    Yields:
-    dict: A batch of data.
-    """
     def initialize_batch():
         """ Helper function to create an empty batch. """
         return {"interaction_id": [], "query": [], "search_results": [], "query_time": [], "answer": []}
@@ -72,6 +59,11 @@ def load_data_in_batches(dataset_path, batch_size,
 
 def read_html(search_results):
     text = ""
+    if isinstance(search_results, str):
+        soup = BeautifulSoup(search_results, "lxml")
+        text += soup.get_text(" ", strip=True)
+        return text
+    
     for html_text in search_results:
         soup = BeautifulSoup(html_text["page_result"], "lxml")
         text += soup.get_text(" ", strip=True)
