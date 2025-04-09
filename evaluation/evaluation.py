@@ -131,7 +131,7 @@ def evaluate_predictions(queries, ground_truths, predictions, evaluation_model_n
         if response:
             # log_response(messages, response)
             eval_res = parse_response(response)
-            print("eval= ", eval_res)
+            # print("eval= ", eval_res)
             if eval_res == 1:
                 n_correct += 1
                 record_list[_idx] = True

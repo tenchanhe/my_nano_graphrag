@@ -30,12 +30,12 @@ if __name__ == "__main__":
             if batch['query'][i] in query_dict.keys():
                 working_path = query_dict[batch['query'][i]]
                 
-                # KG index(build KG)
-                page_list = [
-                    read_html(page['page_result']) if page['page_result'] != "" else read_html(page['page_snippet'])
-                    for page in batch['search_results'][i]
-                ]
-                kg_insert(MODEL, page_list, working_path)
+                # # KG index(build KG)
+                # page_list = [
+                #     read_html(page['page_result']) if page['page_result'] != "" else read_html(page['page_snippet'])
+                #     for page in batch['search_results'][i]
+                # ]
+                # kg_insert(MODEL, page_list, working_path)
             
                 # KG query
                 result = kg_query(MODEL, batch['query'][i], working_path, query_param)
@@ -54,29 +54,29 @@ if __name__ == "__main__":
         if len(query_dict) == 0:
             break
     
-    # evaluation_results, record_list = evaluate_predictions(
-    #     queries, ground_truths, predictions, EVAL_MODEL
-    # )
-
-    # # for i in range(len(queries)):
-    # #     print("query: ", queries[i])
-    # #     print("answer: ", ground_truths[i])
-    # #     print("predict: ", predictions[i])
-    # #     print("yes_or_not: ", record_list[i])
-    # #     print(urls[i])
-    # #     print()
+    evaluation_results, record_list = evaluate_predictions(
+        queries, ground_truths, predictions, EVAL_MODEL
+    )
 
     # for i in range(len(queries)):
-    #     print(queries[i])
-    # print()
-    # for i in range(len(queries)):
-    #     print(ground_truths[i])
-    # print()
-    # for i in range(len(queries)):
-    #     print(predictions[i].replace('\n', ''))
-    # print()
-    # for i in range(len(queries)):
-    #     print(record_list[i])
+    #     print("query: ", queries[i])
+    #     print("answer: ", ground_truths[i])
+    #     print("predict: ", predictions[i])
+    #     print("yes_or_not: ", record_list[i])
+    #     print(urls[i])
+    #     print()
+
+    for i in range(len(queries)):
+        print(queries[i])
+    print()
+    for i in range(len(queries)):
+        print(ground_truths[i])
+    print()
+    for i in range(len(queries)):
+        print(predictions[i].replace('\n', ''))
+    print()
+    for i in range(len(queries)):
+        print(record_list[i])
     # print()
     # for i in range(len(queries)):
     #     print(urls[i])

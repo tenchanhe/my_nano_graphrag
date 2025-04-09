@@ -1005,7 +1005,7 @@ async def local_query(
         query,
         system_prompt=sys_prompt,
     )
-    # print(context)
+    print(context)
     # breakpoint()
     return response
 

@@ -1,9 +1,0 @@
-context:  ['----Analyst 0----\nImportance Score: 60\nBefore becoming CEO of Salesforce, Marc Benioff worked at several companies including Oracle and New England Cable Television (NECTV).\n']
-query:  where did the ceo of salesforce previously work?
-answer:  marc benioff spent 13 years at oracle, before launching salesforce.
-['https://www.salesforce.com/news/stories/the-history-of-salesforce/', 'https://en.wikipedia.org/wiki/Marc_Benioff', 'https://www.salesforce.com/company/leadership/', 'https://en.wikipedia.org/wiki/Salesforce', 'https://www.salesforce.com/news/stories/the-history-of-salesforce/']
-predict:  **Pre-Carrier Background of Marc Benioff**
-
-According to reports from multiple analysts, **before becoming CEO of Salesforce**, Marc Benioff worked at several companies. The most notable pre-carrier position was his tenure at New England Cable Television (NECTV).
-
-{'score': -1.0, 'exact_accuracy': 0.0, 'accuracy': 0.0, 'hallucination': 1.0, 'missing': 0.0, 'n_miss': 0, 'n_correct': 0, 'n_correct_exact': 0, 'total': 1}

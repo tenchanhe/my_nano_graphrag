@@ -1,16 +1,16 @@
 working_template = "working_folder_llama3.2/nano_{}_qwen_cache"
 
 query_dict = {
-    # "where did the ceo of salesforce previously work?": working_template.format("salesforce"),
+    "where did the ceo of salesforce previously work?": working_template.format("salesforce"),
     # "what was mike epps's age at the time of next friday's release?": working_template.format("mike"),
     # "what age did ferdinand magelan discovered the philippines": working_template.format("magelan"),
     # "what was the 76ers' record the year allen iverson won mvp?": working_template.format("iverson"),
     # "what was taylor swifts age when she released her debut album?": working_template.format("taylor"),
     # "how big is the biggest state in the us?": working_template.format("us"),
-    "what age did abraham lincoln begin his presidency?": working_template.format("lincoln"),
-    "at what age did usher perform in the half time show of superbowl?": working_template.format("superbowl"),
-    "who was the first actress and what year to play the role of catwoman in a live-action movie?": working_template.format("catwomen"),
-    "at what age was lorne michaels when he produced his first film?": working_template.format("lorne"),
+    # "what age did abraham lincoln begin his presidency?": working_template.format("lincoln"),
+    # "at what age did usher perform in the half time show of superbowl?": working_template.format("superbowl"),
+    # "who was the first actress and what year to play the role of catwoman in a live-action movie?": working_template.format("catwomen"),
+    # "at what age was lorne michaels when he produced his first film?": working_template.format("lorne"),
     # "who has had more number one hits on the us billboard dance/electronic songs chart, calvin harris or the chainsmokers?": working_template.format("billboard"),
     # "which sport is the most watched in the us, football or basketball?":  working_template.format("ball"),
     # "what company in the dow jones is the best performer today?":  working_template.format("13"),
