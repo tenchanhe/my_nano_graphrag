@@ -48,11 +48,10 @@ async def ollama_model_if_cache(
     kwargs.pop("max_tokens", None)
     kwargs.pop("response_format", None)
 
-    ollama_client = ollama.AsyncClient(host='http://140.119.164.70:11435')
-    # ollama_client = ollama.AsyncClient(
-    #     host='http://140.119.164.60:8080',
-    #     headers={'authorization': 'Bearer chten:u1rRsAhk1hNY6gHMqr4t4F2Dm5QOeKzy'}
-    # )
+    ollama_client = ollama.AsyncClient(
+        host=HOST,
+        headers={'authorization': 'Bearer chten:u1rRsAhk1hNY6gHMqr4t4F2Dm5QOeKzy'}
+    )
     messages = []
     if system_prompt:
         messages.append({"role": "system", "content": system_prompt})
@@ -70,7 +69,8 @@ async def ollama_model_if_cache(
             return if_cache_return["return"]
     # -----------------------------------------------------
     
-    kwargs = {"options": {"num_ctx": 32000}}
+    # kwargs = {"options": {"num_ctx": 65536}}
+    kwargs = {"options": {"num_ctx": 32768}}
     response = await ollama_client.chat(model=model, messages=messages, **kwargs)
     
     # option = {"options": {"num_ctx": 32000}}
