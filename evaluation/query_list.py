@@ -1,7 +1,8 @@
-working_template = "working_folder_llama3.2/nano_{}_qwen_cache"
+# working_template = "working_folder_qwen/nano_{}_qwen_cache"
+working_template = "working_folder_phi4/nano_{}_cache"
 
 query_dict = {
-    "where did the ceo of salesforce previously work?": working_template.format("salesforce"),
+    # "where did the ceo of salesforce previously work?": working_template.format("salesforce"),
     # "what was mike epps's age at the time of next friday's release?": working_template.format("mike"),
     # "what age did ferdinand magelan discovered the philippines": working_template.format("magelan"),
     # "what was the 76ers' record the year allen iverson won mvp?": working_template.format("iverson"),
@@ -21,6 +22,17 @@ query_dict = {
     # "who wrote the theme song for the movie ghostbusters (1984)?":  working_template.format("18"),
     # "when forest whitaker won his/her first oscar best actor, which movie won the best picture?":  working_template.format("19"),
     # "if i were to visit the capital of hawaii, how high up would i be?":  working_template.format("20"),
+    "where did the ceo of anthropic previously work?":  working_template.format("21"),
+    "when tom hanks won their first academy award for best actor, which film was recognized as the best picture?":  working_template.format("22"),
+    "how old was leonardo dicaprio when he won best actor award?":  working_template.format("23"),
+    "how many songs were released by the artist who received best new artist in 57th grammy (2014)?":  working_template.format("24"),
+    "who was the goalkeeper of the team that won the fifa world cup last year?": working_template.format("25"),
+    "can you tell me which country the artist who won the best new artist in 54th grammy (2011) was born?": working_template.format("26"),
+    "what weight class is the ufc number one men's pound for pound fighter in?": working_template.format("27"),
+    "what is the elevation of the capital of ohio?": working_template.format("28"),
+    "how many people live in the smallest city of finland?": working_template.format("29"),
+    "how many people live in the biggest city of russia?": working_template.format("30"),
+    "what sport did the ufc heavyweight champion's brother play?": working_template.format("31"),
 }
 # breakpoint()
 
@@ -41,3 +53,16 @@ query_dict = {
 "who wrote the theme song for the movie ghostbusters (1984)?"
 "when forest whitaker won his/her first oscar best actor, which movie won the best picture?"
 "if i were to visit the capital of hawaii, how high up would i be?"
+
+"where did the ceo of anthropic previously work?"
+"when tom hanks won their first academy award for best actor, which film was recognized as the best picture?"
+"how old was leonardo dicaprio when he won best actor award?"
+"how many songs were released by the artist who received best new artist in 57th grammy (2014)?"
+"who was the goalkeeper of the team that won the fifa world cup last year?"
+"can you tell me which country the artist who won the best new artist in 54th grammy (2011) was born?"
+"what weight class is the ufc number one men's pound for pound fighter in?"
+
+"what is the elevation of the capital of ohio?"
+"how many people live in the smallest city of finland?"
+"how many people live in the biggest city of russia?"
+"what sport did the ufc heavyweight champion's brother play?"

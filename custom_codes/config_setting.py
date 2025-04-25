@@ -4,8 +4,8 @@ HOST = "http://140.119.164.70:11435"
 # HOST = "http://140.119.164.60:8080"
 
 query_param = QueryParam(
-    mode='local',
-    # mode='global',
+    # mode='local',
+    mode='global',
     # mode = "naive",
     only_need_context = False,
     # response_type = "Multiple Paragraphs",

@@ -7,8 +7,8 @@ from custom_codes.config_setting import query_param
 
 if __name__ == "__main__":
 
-    MODEL = "llama3.2"
-    # MODEL = "qwen2.5:32b"
+    # MODEL = "llama3.2"
+    MODEL = "phi4"
     EVAL_MODEL = "qwen2.5:32b"
     # EVAL_MODEL = "phi4:latest"
     BATCH_SIZE = 10
@@ -23,10 +23,12 @@ if __name__ == "__main__":
     
     # Generate predictions
     queries, ground_truths, predictions = [], [], []
-    urls, types = [], []
+    urls, types, ids = [], [], []
+    id = -1
 
     for batch in load_data_in_batches(DATASET_PATH, BATCH_SIZE, dataset_setting):
         for i in range(len(batch['query'])):
+            id += 1
             if batch['query'][i] in query_dict.keys():
                 working_path = query_dict[batch['query'][i]]
                 
@@ -45,6 +47,7 @@ if __name__ == "__main__":
                 ground_truths.append(batch["answer"][i])
                 predictions.append(result)
                 urls.append([pages['page_url'] for pages in batch['search_results'][i]])
+                ids.append(id)
                 # print([pages['page_name'] for pages in batch['search_results'][i]])
                 # print(batch['search_results'][i][2]['page_result'])
                 # types.append(batch['question_type'][i])
@@ -67,6 +70,9 @@ if __name__ == "__main__":
     #     print()
 
     for i in range(len(queries)):
+        print(ids[i])
+    print()
+    for i in range(len(queries)):
         print(queries[i])
     print()
     for i in range(len(queries)):
@@ -81,4 +87,4 @@ if __name__ == "__main__":
     # for i in range(len(queries)):
     #     print(urls[i])
 
-    # print(evaluation_results)
+    print(evaluation_results)
