@@ -1,6 +1,5 @@
-# other repo
-esg_kg/
-
+esg_data/
+esg_result/
 test.txt
 test.py
 nano*/
@@ -8,6 +7,7 @@ evaluation/data/*
 test_code/
 *.txt
 working_folder/
+kg_cache_esg_phi4
 
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
