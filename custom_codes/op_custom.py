@@ -118,8 +118,33 @@ def get_chunks(new_docs, chunk_func=chunking_by_token_size, **chunk_func_params)
             {compute_mdhash_id(chunk["content"], prefix="chunk-"): chunk}
         )
 
+    # breakpoint()
     return inserting_chunks
 
+
+def get_chunks_by_pages(new_docs):
+    inserting_chunks = {}
+    pattern = r'(-----Page\d+-----source:[^\n]+\n?)'
+
+    new_docs_list = list(new_docs.items())
+    docs = [new_doc[1]["content"] for new_doc in new_docs_list]
+    # breakpoint()
+    parts = [re.split(pattern, doc) for doc in docs]
+    parts = parts[0]
+    
+    # 重新組裝：因為 split 會把分隔符留在偶數 index
+    chunks = []
+    i = 1
+    while i < len(parts):
+        header = parts[i]
+        content = parts[i + 1] if i + 1 < len(parts) else ''
+        inserting_chunks.update(
+            {header: {"content": content}}
+        )
+        i += 2
+
+    # breakpoint()
+    return inserting_chunks
 
 async def _handle_entity_relation_summary(
     entity_or_relation_name: str,
@@ -1174,6 +1199,7 @@ async def naive_query(
     sys_prompt = sys_prompt_temp.format(
         content_data=section, response_type=query_param.response_type
     )
+    # print(section)
     response = await use_model_func(
         query,
         system_prompt=sys_prompt,

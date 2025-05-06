@@ -11,7 +11,7 @@ if __name__ == "__main__":
     MODEL = "phi4"
     EVAL_MODEL = "qwen2.5:32b"
     # EVAL_MODEL = "phi4:latest"
-    BATCH_SIZE = 10
+    BATCH_SIZE = 50
     # QUERY_MODE = 'local'
     
     DATASET_PATH = "evaluation/data/crag_task_1_dev_v4_release.jsonl.bz2"    
@@ -83,8 +83,8 @@ if __name__ == "__main__":
     print()
     for i in range(len(queries)):
         print(record_list[i])
-    # print()
-    # for i in range(len(queries)):
-    #     print(urls[i])
+    print()
+    for i in range(len(queries)):
+        print(urls[i])
 
     print(evaluation_results)
