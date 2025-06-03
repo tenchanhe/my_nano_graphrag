@@ -26,8 +26,8 @@ if __name__ == "__main__":
     # print(FAKE_TEXT)
     # TEXT = read_html(TEXT)
 
-    start = time()
-    kg_insert(MODEL, TEXT, WORKING_DIR)
-    print("indexing time:", time() - start)
+    # start = time()
+    # kg_insert(MODEL, TEXT, WORKING_DIR)
+    # print("indexing time:", time() - start)
 
-    # kg_query(MODEL, "", WORKING_DIR, query_param)
+    kg_query(MODEL, "李曉明是誰？", WORKING_DIR, query_param)

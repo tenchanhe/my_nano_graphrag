@@ -4,14 +4,14 @@ from nano_graphrag.base import QueryParam
 HOST = "http://140.119.164.60:8080"
 
 query_param = QueryParam(
-    # mode='local',
+    mode='local',
     # mode='global',
-    mode = "naive",
+    # mode = "naive",
     only_need_context = False,
     response_type = "Multiple Paragraphs",
     # response_type = "Just Simple Answer",
     level = 2,
-    top_k = 20,
+    top_k = 20, # ori = 20
     # naive search
     # naive_max_token_for_text_unit = 12000,
     # local search

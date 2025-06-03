@@ -307,19 +307,19 @@ class MyGraphRAG:
                 return
             logger.info(f"[New Chunks] inserting {len(inserting_chunks)} chunks")
             
-            ### Chunk by pages!
-            pages_chunks = get_chunks_by_pages(
-                new_docs=new_docs
-            )
-            #####
+            # ### Chunk by pages!
+            # pages_chunks = get_chunks_by_pages(
+            #     new_docs=new_docs
+            # )
+            # #####
             # breakpoint()
 
             if self.enable_naive_rag:
                 logger.info("Insert chunks for naive RAG")
-                # await self.chunks_vdb.upsert(inserting_chunks)
+                await self.chunks_vdb.upsert(inserting_chunks)
                 
-                ### Chunk by pages!
-                await self.chunks_vdb.upsert(pages_chunks)
+                # ### Chunk by pages!
+                # await self.chunks_vdb.upsert(pages_chunks)
             
             print(RED_COLOR + "chunking time:", time() - start, RESET_COLOR)
 

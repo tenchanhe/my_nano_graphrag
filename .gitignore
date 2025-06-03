@@ -9,6 +9,8 @@ test_code/
 *.txt
 working_folder/
 kg_cache_esg_phi4
+kg_cache_ultra
+kg_delta_qwen2
 
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python

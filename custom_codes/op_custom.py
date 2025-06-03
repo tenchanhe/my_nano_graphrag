@@ -130,18 +130,19 @@ def get_chunks_by_pages(new_docs):
     docs = [new_doc[1]["content"] for new_doc in new_docs_list]
     # breakpoint()
     parts = [re.split(pattern, doc) for doc in docs]
-    parts = parts[0]
+    # breakpoint()
     
     # 重新組裝：因為 split 會把分隔符留在偶數 index
-    chunks = []
-    i = 1
-    while i < len(parts):
-        header = parts[i]
-        content = parts[i + 1] if i + 1 < len(parts) else ''
-        inserting_chunks.update(
-            {header: {"content": content}}
-        )
-        i += 2
+    for i in range(len(parts)):
+        j = 1
+        while j < len(parts[i]):
+            header = parts[i][j]
+            content = parts[i][j + 1] if j + 1 < len(parts[i]) else ''
+            if content != '':
+                inserting_chunks.update(
+                    {header: {"content": content}}
+                )
+            j += 2
 
     # breakpoint()
     return inserting_chunks
@@ -964,25 +965,11 @@ async def _build_local_query_context(
     for i, t in enumerate(use_text_units):
         text_units_section_list.append([i, t["content"]])
     text_units_context = list_of_list_to_csv(text_units_section_list)
-    return f"""
------Reports-----
-```csv
-{communities_context}
-```
------Entities-----
-```csv
-{entities_context}
-```
------Relationships-----
-```csv
-{relations_context}
-```
------Sources-----
-```csv
-{text_units_context}
-```
-"""
 #     return f"""
+# -----Reports-----
+# ```csv
+# {communities_context}
+# ```
 # -----Entities-----
 # ```csv
 # {entities_context}
@@ -991,7 +978,21 @@ async def _build_local_query_context(
 # ```csv
 # {relations_context}
 # ```
+# -----Sources-----
+# ```csv
+# {text_units_context}
+# ```
 # """
+    return f"""
+-----Entities-----
+```csv
+{entities_context}
+```
+-----Relationships-----
+```csv
+{relations_context}
+```
+"""
 
 async def local_query(
     query,
@@ -1181,8 +1182,10 @@ async def naive_query(
 ):
     use_model_func = global_config["best_model_func"]
     results = await chunks_vdb.query(query, top_k=query_param.top_k)
+
     if not len(results):
         return PROMPTS["fail_response"]
+    
     chunks_ids = [r["id"] for r in results]
     chunks = await text_chunks_db.get_by_ids(chunks_ids)
 
@@ -1193,6 +1196,32 @@ async def naive_query(
     )
     logger.info(f"Truncate {len(chunks)} to {len(maybe_trun_chunks)} chunks")
     section = "--New Chunk--\n".join([c["content"] for c in maybe_trun_chunks])
+
+
+    # ### For delta pages
+    # chunks_ids = set()
+    # f=0
+    # while len(chunks_ids) < 3:
+    #     match = re.search(r'source:(.+)', results[f]['id'])
+    #     file_name = match.group(1)
+    #     chunks_ids.add(file_name)
+    #     f+=1
+    #     if f==len(results):
+    #         break
+    # # breakpoint()
+    # ## retirve the markdown file
+    # section = ""
+    # md_path = "/tmp2/chten/delta/my_magic_doc/39_files_md/"
+    # # breakpoint()
+    # print("相關文檔為：")
+    # for file_name in chunks_ids:
+    #     print(file_name)
+    #     with open(md_path+file_name, mode='r', encoding='utf-8') as f:
+    #         section += f.read()
+    #         # chunks.append(f.read())
+    # ###
+
+
     if query_param.only_need_context:
         return section
     sys_prompt_temp = PROMPTS["naive_rag_response"]
