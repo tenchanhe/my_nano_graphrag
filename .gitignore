@@ -1,13 +1,15 @@
+kg_delta_qwen/
+esg_data/
+esg_result/
 test.txt
 test.py
 nano*/
 evaluation/data/*
 test_code/
 *.txt
-esg_data/
+working_folder/
 kg_cache_esg_phi4/
 kg_cache_ultra/
-kg_delta_qwen/
 kg_delta_qwen2/
 
 # Created by https://www.toptal.com/developers/gitignore/api/python

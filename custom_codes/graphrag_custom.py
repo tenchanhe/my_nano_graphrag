@@ -4,6 +4,8 @@ from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from functools import partial
 from typing import Callable, Dict, List, Optional, Type, Union, cast
+RED_COLOR = "\033[91m"
+RESET_COLOR = "\033[0m" 
 
 import tiktoken
 
@@ -26,6 +28,7 @@ from custom_codes.op_custom import (
     local_query,
     global_query,
     naive_query,
+    get_chunks_by_pages
 )
 from nano_graphrag._storage import (
     JsonKVStorage,
@@ -56,7 +59,7 @@ class MyGraphRAG:
     )
     # graph mode
     enable_local: bool = True
-    enable_naive_rag: bool = False
+    enable_naive_rag: bool = True
 
     # text chunking
     chunk_func: Callable[
@@ -270,6 +273,7 @@ class MyGraphRAG:
         try:
             if isinstance(string_or_strings, str):
                 string_or_strings = [string_or_strings]
+            # breakpoint()
             # ---------- new docs
             new_docs = {
                 compute_mdhash_id(c.strip(), prefix="doc-"): {"content": c.strip()}
@@ -283,7 +287,8 @@ class MyGraphRAG:
             logger.info(f"[New Docs] inserting {len(new_docs)} docs")
 
             # ---------- chunking
-
+            
+            start = time()
             inserting_chunks = get_chunks(
                 new_docs=new_docs,
                 chunk_func=self.chunk_func,
@@ -301,15 +306,28 @@ class MyGraphRAG:
                 logger.warning(f"All chunks are already in the storage")
                 return
             logger.info(f"[New Chunks] inserting {len(inserting_chunks)} chunks")
+            
+            # ### Chunk by pages!
+            # pages_chunks = get_chunks_by_pages(
+            #     new_docs=new_docs
+            # )
+            # #####
+            # breakpoint()
+
             if self.enable_naive_rag:
                 logger.info("Insert chunks for naive RAG")
                 await self.chunks_vdb.upsert(inserting_chunks)
+                
+                # ### Chunk by pages!
+                # await self.chunks_vdb.upsert(pages_chunks)
+            
+            print(RED_COLOR + "chunking time:", time() - start, RESET_COLOR)
 
             # TODO: no incremental update for communities now, so just drop all
             await self.community_reports.drop()
 
             # ---------- extract/summary entity and upsert to graph
-            start = time()
+            
             logger.info("[Entity Extraction]...")
             maybe_new_kg = await self.entity_extraction_func(
                 inserting_chunks,
@@ -323,7 +341,7 @@ class MyGraphRAG:
                 return
             self.chunk_entity_relation_graph = maybe_new_kg
             # breakpoint()
-            print("extract entity time:", time() - start)
+            print(RED_COLOR + "extract entity time:", time() - start, RESET_COLOR)
             # ---------- update clusterings of graph
             logger.info("[Community Report]...")
 
@@ -335,7 +353,7 @@ class MyGraphRAG:
                 self.community_reports, self.chunk_entity_relation_graph, asdict(self)
             )
 
-            print("generate report time:", time() - start)
+            print(RED_COLOR + "generate report time:", time() - start, RESET_COLOR)
 
             # ---------- commit upsertings and indexing
             await self.full_docs.upsert(new_docs)

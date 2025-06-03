@@ -3,6 +3,7 @@ import ollama
 from loguru import logger
 from evaluation.prompt_list import PROMPTS
 from tqdm.auto import tqdm
+from custom_codes.config_setting import HOST
 # from ollama import chat
 # from transformers import LlamaTokenizerFast
 
@@ -14,23 +15,23 @@ def get_system_message():
     return PROMPTS['INSTRUCTIONS'] + PROMPTS['IN_CONTEXT_EXAMPLES']
 
 
-def attempt_api_call(client, model_name, messages, max_retries=10):
-    """Attempt an API call with retries upon encountering specific errors."""
-    # todo: add default response when all efforts fail
-    for attempt in range(max_retries):
-        try:
-            response = client.chat.completions.create(
-                model=model_name,
-                messages=messages,
-                response_format={"type": "json_object"},
-            )
-            return response.choices[0].message.content
-        # except (APIConnectionError, RateLimitError):
-            logger.warning(f"API call failed on attempt {attempt + 1}, retrying...")
-        except Exception as e:
-            logger.error(f"Unexpected error: {e}")
-            break
-    return None
+# def attempt_api_call(client, model_name, messages, max_retries=10):
+#     """Attempt an API call with retries upon encountering specific errors."""
+#     # todo: add default response when all efforts fail
+#     for attempt in range(max_retries):
+#         try:
+#             response = client.chat.completions.create(
+#                 model=model_name,
+#                 messages=messages,
+#                 response_format={"type": "json_object"},
+#             )
+#             return response.choices[0].message.content
+#         # except (APIConnectionError, RateLimitError):
+#             logger.warning(f"API call failed on attempt {attempt + 1}, retrying...")
+#         except Exception as e:
+#             logger.error(f"Unexpected error: {e}")
+#             break
+#     return None
 
 
 # def log_response(messages, response, output_directory="api_responses"):
@@ -45,6 +46,7 @@ def attempt_api_call(client, model_name, messages, max_retries=10):
 def parse_response(resp: str):
     """Pass auto-eval output from the evaluator."""
     try:
+        # breakpoint()
         resp = resp.lower()
         model_resp = json.loads(resp)
         answer = -1
@@ -59,6 +61,7 @@ def parse_response(resp: str):
         else:
             raise ValueError(f"Could not parse answer from response: {model_resp}")
 
+        # print("asnwer=", model_resp, answer)
         return answer
     except:
         return -1
@@ -73,7 +76,11 @@ def parse_response(resp: str):
 #     return trimmed_prediction
 
 def attempt_ollama_call(model_name, messages):
-    ollama_client = ollama.Client(host='http://140.119.164.70:11435')
+    # ollama_client = ollama.Client(host='http://140.119.164.70:11435')
+    ollama_client = ollama.Client(
+        host=HOST,
+        headers={'authorization': 'Bearer chten:u1rRsAhk1hNY6gHMqr4t4F2Dm5QOeKzy'}
+    )
     # breakpoint()
 
     try:        
@@ -88,6 +95,7 @@ def attempt_ollama_call(model_name, messages):
 def evaluate_predictions(queries, ground_truths, predictions, evaluation_model_name):
     n_miss, n_correct, n_correct_exact = 0, 0, 0
     system_message = get_system_message()
+    record_list = [False for _ in range(len(queries))]
 
     # breakpoint()
     for _idx, prediction in enumerate(tqdm(
@@ -109,10 +117,12 @@ def evaluate_predictions(queries, ground_truths, predictions, evaluation_model_n
 
         if "i don't know" in prediction_lowercase:
             n_miss += 1
+            record_list[_idx] = False
             continue
         elif prediction_lowercase == ground_truth_lowercase:
             n_correct_exact += 1
             n_correct += 1
+            record_list[_idx] = True
             continue
 
         # 使用 Ollama 進行推理
@@ -121,8 +131,12 @@ def evaluate_predictions(queries, ground_truths, predictions, evaluation_model_n
         if response:
             # log_response(messages, response)
             eval_res = parse_response(response)
+            # print("eval= ", eval_res)
             if eval_res == 1:
                 n_correct += 1
+                record_list[_idx] = True
+            else:
+                record_list[_idx] = False
 
     n = len(predictions)
     results = {
@@ -137,5 +151,5 @@ def evaluate_predictions(queries, ground_truths, predictions, evaluation_model_n
         "total": n,
     }
     logger.info(results)
-    return results
+    return results, record_list
 

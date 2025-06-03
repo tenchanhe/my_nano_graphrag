@@ -27,6 +27,8 @@ from nano_graphrag.base import (
     QueryParam,
 )
 from custom_codes.prompt_custom import GRAPH_FIELD_SEP, PROMPTS
+RED_COLOR = "\033[91m"
+RESET_COLOR = "\033[0m" 
 
 
 def chunking_by_token_size(
@@ -116,8 +118,34 @@ def get_chunks(new_docs, chunk_func=chunking_by_token_size, **chunk_func_params)
             {compute_mdhash_id(chunk["content"], prefix="chunk-"): chunk}
         )
 
+    # breakpoint()
     return inserting_chunks
 
+
+def get_chunks_by_pages(new_docs):
+    inserting_chunks = {}
+    pattern = r'(-----Page\d+-----source:[^\n]+\n?)'
+
+    new_docs_list = list(new_docs.items())
+    docs = [new_doc[1]["content"] for new_doc in new_docs_list]
+    # breakpoint()
+    parts = [re.split(pattern, doc) for doc in docs]
+    # breakpoint()
+    
+    # 重新組裝：因為 split 會把分隔符留在偶數 index
+    for i in range(len(parts)):
+        j = 1
+        while j < len(parts[i]):
+            header = parts[i][j]
+            content = parts[i][j + 1] if j + 1 < len(parts[i]) else ''
+            if content != '':
+                inserting_chunks.update(
+                    {header: {"content": content}}
+                )
+            j += 2
+
+    # breakpoint()
+    return inserting_chunks
 
 async def _handle_entity_relation_summary(
     entity_or_relation_name: str,
@@ -321,6 +349,9 @@ async def extract_entities(
     already_entities = 0
     already_relations = 0
 
+    from time import time
+    start = time()
+
 
     async def _process_single_content(chunk_key_dp: tuple[str, TextChunkSchema]):
         nonlocal already_processed, already_entities, already_relations
@@ -347,6 +378,7 @@ async def extract_entities(
             if_loop_result = if_loop_result.strip().strip('"').strip("'").lower()
             if if_loop_result != "yes":
                 break
+        
 
         records = split_string_by_multi_markers(
             final_result,
@@ -386,9 +418,10 @@ async def extract_entities(
         ]
         print(
             f"{now_ticks} Processed {already_processed}({already_processed*100//len(ordered_chunks)}%) chunks,  {already_entities} entities(duplicated), {already_relations} relations(duplicated)\r",
-            end="",
-            flush=True,
+            # end="",
+            # flush=True,
         )
+        print(RED_COLOR + "process single time:", time() - start, RESET_COLOR)
         return dict(maybe_nodes), dict(maybe_edges)
 
     # use_llm_func is wrapped in ascynio.Semaphore, limiting max_async callings
@@ -417,6 +450,20 @@ async def extract_entities(
             for k, v in maybe_edges.items()
         ]
     )
+    
+    # dump to json
+    maybe_nodes = dict(maybe_nodes)
+    maybe_edges = dict(maybe_edges)
+    maybe_edges = {str(k): v for k, v in maybe_edges.items()}
+    nodes_edges = {
+        "entities": maybe_nodes,
+        "relations": maybe_edges
+    }
+    output_path = global_config["working_dir"]+"/kg_cache.json"
+    with open(output_path, "w", encoding="utf8") as f:
+        json.dump(nodes_edges, f, indent=2, ensure_ascii=False)
+
+
     if not len(all_entities_data):
         logger.warning("Didn't extract any entities, maybe your LLM is not working")
         return None
@@ -864,12 +911,12 @@ async def _build_local_query_context(
         for k, n, d in zip(results, node_datas, node_degrees)
         if n is not None
     ]
-    # use_communities = await _find_most_related_community_from_entities(
-    #     node_datas, query_param, community_reports
-    # )
-    # use_text_units = await _find_most_related_text_unit_from_entities(
-    #     node_datas, query_param, text_chunks_db, knowledge_graph_inst
-    # )
+    use_communities = await _find_most_related_community_from_entities(
+        node_datas, query_param, community_reports
+    )
+    use_text_units = await _find_most_related_text_unit_from_entities(
+        node_datas, query_param, text_chunks_db, knowledge_graph_inst
+    )
     use_relations = await _find_most_related_edges_from_entities(
         node_datas, query_param, knowledge_graph_inst
     )
@@ -909,15 +956,15 @@ async def _build_local_query_context(
         )
     relations_context = list_of_list_to_csv(relations_section_list)
 
-    # communities_section_list = [["id", "content"]]
-    # for i, c in enumerate(use_communities):
-    #     communities_section_list.append([i, c["report_string"]])
-    # communities_context = list_of_list_to_csv(communities_section_list)
+    communities_section_list = [["id", "content"]]
+    for i, c in enumerate(use_communities):
+        communities_section_list.append([i, c["report_string"]])
+    communities_context = list_of_list_to_csv(communities_section_list)
 
-    # text_units_section_list = [["id", "content"]]
-    # for i, t in enumerate(use_text_units):
-    #     text_units_section_list.append([i, t["content"]])
-    # text_units_context = list_of_list_to_csv(text_units_section_list)
+    text_units_section_list = [["id", "content"]]
+    for i, t in enumerate(use_text_units):
+        text_units_section_list.append([i, t["content"]])
+    text_units_context = list_of_list_to_csv(text_units_section_list)
 #     return f"""
 # -----Reports-----
 # ```csv
@@ -956,7 +1003,6 @@ async def local_query(
     query_param: QueryParam,
     global_config: dict,
 ) -> str:
-    query_param.response_type = "Just Simple Answer"
     use_model_func = global_config["best_model_func"]
     context = await _build_local_query_context(
         query,
@@ -970,7 +1016,14 @@ async def local_query(
         return context
     if context is None:
         return PROMPTS["fail_response"]
-    sys_prompt_temp = PROMPTS["local_rag_response"]
+    
+    if query_param.response_type == "Multiple Paragraphs":
+        sys_prompt_temp = PROMPTS["local_rag_response_ori"]
+    elif query_param.response_type == "Just Simple Answer":
+        sys_prompt_temp = PROMPTS["local_rag_response_simple"]
+    else:
+        raise NameError("QUERY PARAM RESPONSE TYPE NOT FOUND!")
+    
     sys_prompt = sys_prompt_temp.format(
         context_data=context, response_type=query_param.response_type
     )
@@ -978,7 +1031,7 @@ async def local_query(
         query,
         system_prompt=sys_prompt,
     )
-    print(context)
+    # print(context)
     # breakpoint()
     return response
 
@@ -1109,7 +1162,7 @@ Importance Score: {dp['score']}
     if query_param.only_need_context:
         return points_context
     # breakpoint()
-    print("context: ", points_context)
+    # print("context: ", points_context)
     sys_prompt_temp = PROMPTS["global_reduce_rag_response"]
     response = await use_model_func(
         query,
@@ -1129,8 +1182,10 @@ async def naive_query(
 ):
     use_model_func = global_config["best_model_func"]
     results = await chunks_vdb.query(query, top_k=query_param.top_k)
+
     if not len(results):
         return PROMPTS["fail_response"]
+    
     chunks_ids = [r["id"] for r in results]
     chunks = await text_chunks_db.get_by_ids(chunks_ids)
 
@@ -1141,12 +1196,39 @@ async def naive_query(
     )
     logger.info(f"Truncate {len(chunks)} to {len(maybe_trun_chunks)} chunks")
     section = "--New Chunk--\n".join([c["content"] for c in maybe_trun_chunks])
+
+
+    # ### For delta pages
+    # chunks_ids = set()
+    # f=0
+    # while len(chunks_ids) < 3:
+    #     match = re.search(r'source:(.+)', results[f]['id'])
+    #     file_name = match.group(1)
+    #     chunks_ids.add(file_name)
+    #     f+=1
+    #     if f==len(results):
+    #         break
+    # # breakpoint()
+    # ## retirve the markdown file
+    # section = ""
+    # md_path = "/tmp2/chten/delta/my_magic_doc/39_files_md/"
+    # # breakpoint()
+    # print("相關文檔為：")
+    # for file_name in chunks_ids:
+    #     print(file_name)
+    #     with open(md_path+file_name, mode='r', encoding='utf-8') as f:
+    #         section += f.read()
+    #         # chunks.append(f.read())
+    # ###
+
+
     if query_param.only_need_context:
         return section
     sys_prompt_temp = PROMPTS["naive_rag_response"]
     sys_prompt = sys_prompt_temp.format(
         content_data=section, response_type=query_param.response_type
     )
+    # print(section)
     response = await use_model_func(
         query,
         system_prompt=sys_prompt,
