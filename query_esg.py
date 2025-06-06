@@ -1,7 +1,7 @@
 import csv
-from custom_codes.config_setting import query_param
-from evaluation.kg_utils import kg_query
-from evaluation.evaluation import evaluate_predictions
+from my_nano_graphrag.custom_codes.config_setting import query_param
+from my_nano_graphrag.evaluation.kg_utils import kg_query
+from my_nano_graphrag.evaluation.evaluation import evaluate_predictions
 
 
 # MODEL = "llama3.2"

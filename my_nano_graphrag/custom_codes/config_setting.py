@@ -8,8 +8,8 @@ query_param = QueryParam(
     # mode='global',
     # mode = "naive",
     only_need_context = False,
-    response_type = "Multiple Paragraphs",
-    # response_type = "Just Simple Answer",
+    # response_type = "Multiple Paragraphs",
+    response_type = "Just Simple Answer",
     level = 2,
     top_k = 20, # ori = 20
     # naive search

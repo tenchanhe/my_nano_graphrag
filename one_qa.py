@@ -1,7 +1,7 @@
-from evaluation.data_loader import load_data_in_batches, read_html
-from evaluation.evaluation import evaluate_predictions
-from evaluation.kg_utils import kg_insert, kg_query
-from custom_codes.config_setting import query_param
+from my_nano_graphrag.evaluation.data_loader import load_data_in_batches, read_html
+from my_nano_graphrag.evaluation.evaluation import evaluate_predictions
+from my_nano_graphrag.evaluation.kg_utils import kg_insert, kg_query
+from my_nano_graphrag.custom_codes.config_setting import query_param
 
 
 if __name__ == "__main__":
